@@ -1,0 +1,115 @@
+/* --- Global Styles --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Professional Blue Gradient */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Login/Signup Container --- */
+.container {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px; /* Mobile friendly width */
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+    font-size: 1.8rem;
+}
+
+/* --- Input Fields --- */
+.input-group {
+    margin-bottom: 1.2rem;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Buttons --- */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+/* --- Toggle Links (Sign In / Sign Up) --- */
+.toggle-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.toggle-text a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.toggle-text a:hover {
+    text-decoration: underline;
+}
+
+/* --- Utilities --- */
+.hidden {
+    display: none;
+}
+
+/* --- Dashboard Specific Styles (Simple) --- */
+#dashboardScreen {
+    background-color: white;
+    width: 100%;
+    height: 100vh;
+    padding: 2rem;
+    display: none; /* JS handle karega */
+}
+
+#dashboardScreen h1 {
+    color: #1e3a8a;
+}
