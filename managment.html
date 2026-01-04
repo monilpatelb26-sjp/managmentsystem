@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dayflow - Login & Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="managment.css">
-    </head>
+</head>
 <body>
 
     <div class="container" id="main-container">
@@ -21,7 +22,6 @@
                 <input type="password" id="login-pass" placeholder="Enter password" required>
             </div>
             <button type="button" onclick="handleLogin()">Log In</button>
-        
             <div class="toggle-text">
                 Don't have an account? <a onclick="toggleForms()" style="cursor:pointer; color:blue;">Sign Up</a>
             </div>
@@ -29,91 +29,108 @@
 
         <form id="signup-form" class="hidden" style="display:none;">
             <div class="input-group">
-                <label>Employee ID</label>
+                <label id="dynamic-id-label">Employee ID</label>
                 <input type="text" id="signup-empid" placeholder="e.g., EMP001" required>
             </div>
-
             <div class="input-group">
                 <label>Email</label>
                 <input type="email" id="signup-email" placeholder="name@company.com" required>
             </div>
-
             <div class="input-group">
                 <label>Password</label>
                 <input type="password" id="signup-pass" placeholder="Create a strong password" required>
             </div>
-
             <div class="input-group">
                 <label>Role</label>
-                <select id="signup-role">
+                <select id="signup-role" onchange="updateRoleLabel()">
                     <option value="Employee">Employee</option>
-                    <option value="HR">HR / Admin</option>
+                    <option value="Admin">HR / Admin</option>
                 </select>
             </div>
-
             <button type="button" onclick="handleSignUp()">Sign Up</button>
             <div class="toggle-text">
                 Already have an account? <a onclick="toggleForms()" style="cursor:pointer; color:blue;">Sign In</a>
             </div>
         </form>
     </div>
-
-    <div id="dashboardScreen" style="display:none; height: 100vh; background-color: #f3f4f6;">
-        
-        <div style="width: 250px; background-color: #1e293b; color: white; display: flex; flex-direction: column; padding: 20px;">
-            <h2 style="margin-bottom: 40px;">Dayflow HRMS</h2>
-            <div style="padding: 10px; cursor: pointer; background: #2563eb; border-radius: 5px;">Dashboard</div>
-            <div style="padding: 10px; cursor: pointer; margin-top: 10px;">Attendance</div>
-            <div style="padding: 10px; cursor: pointer; margin-top: 10px;">Leave Requests</div>
-            <div style="margin-top: auto; padding: 10px; cursor: pointer; color: #f87171;" onclick="location.reload()">Logout</div>
-        </div>
-
-        <div style="flex: 1; padding: 30px; overflow-y: auto;">
+    <div id="adminFeatures" class="hidden" style="display: none; width: 100%; height: 100vh;">
+        <div style="display: flex; height: 100vh; background: #f3f4f6;">
             
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h1>Dashboard Overview</h1>
-                <div style="text-align: right;">
-                    <h3 id="display-name" style="margin: 0; color: #2563eb;">User Name</h3>
-                    <p id="display-email" style="margin: 0; color: gray;">user@email.com</p>
-                    <small id="display-role" style="background: #ddd; padding: 2px 8px; border-radius: 4px;">Role</small>
-                </div>
+            <div style="width: 250px; background: #1e293b; color: white; padding: 20px; display: flex; flex-direction: column;">
+                <h3 style="margin-bottom: 30px; border-bottom: 1px solid #475569; padding-bottom: 10px;">
+                    <i class="fas fa-user-shield"></i> Admin Panel
+                </h3>
+                
+                <button onclick="showAdminSection('employees')" style="text-align:left; margin-bottom:10px; padding:12px; cursor:pointer; background:transparent; color:white; border:none; font-size:16px;">
+                    <i class="fas fa-users"></i> Employees
+                </button>
+                <button onclick="showAdminSection('attendance')" style="text-align:left; margin-bottom:10px; padding:12px; cursor:pointer; background:transparent; color:white; border:none; font-size:16px;">
+                    <i class="fas fa-calendar-check"></i> Attendance
+                </button>
+                <button onclick="showAdminSection('leaves')" style="text-align:left; margin-bottom:10px; padding:12px; cursor:pointer; background:transparent; color:white; border:none; font-size:16px;">
+                    <i class="fas fa-envelope-open-text"></i> Leave Req.
+                </button>
+                <button onclick="showAdminSection('payroll')" style="text-align:left; margin-bottom:10px; padding:12px; cursor:pointer; background:transparent; color:white; border:none; font-size:16px;">
+                    <i class="fas fa-money-bill-wave"></i> Payroll
+                </button>
+                
+                <button onclick="location.reload()" style="margin-top:auto; background:#ef4444; color:white; padding:10px; border:none; border-radius:5px; cursor:pointer;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
 
-            <div id="employeeFeatures" class="hidden">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <h3>My Profile</h3>
-                        <p>ID: <span id="display-id">EMP000</span></p>
-                        <button>View Details</button>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <h3>Attendance</h3>
-                        <p>Status: <span style="color: green; font-weight: bold;">Present</span></p>
-                        <button onclick="alert('Attendance Marked!')">Check In</button>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <h3>Leave Request</h3>
-                        <p>Balance: 12 Days</p>
-                        <button>Apply Leave</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="adminFeatures" class="hidden">
-                <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <h3>Admin Controls</h3>
-                    <p>Manage all employees and approvals here.</p>
-                    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-                        <tr style="background: #eee;"><th>ID</th><th>Name</th><th>Action</th></tr>
-                        <tr><td>E001</td><td>Bob</td><td><button>Edit</button></td></tr>
-                        <tr><td>E002</td><td>Alice</td><td><button>Edit</button></td></tr>
+            <div style="flex: 1; padding: 30px; overflow-y: auto;">
+                
+                <div id="section-employees">
+                    <h2 style="color:#1e3a8a; margin-bottom:20px;">Manage Employees</h2>
+                    <table border="1" style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <thead>
+                            <tr style="background: #2563eb; color: white;">
+                                <th style="padding:12px;">ID</th>
+                                <th style="padding:12px;">Email</th>
+                                <th style="padding:12px;">Job Title</th>
+                                <th style="padding:12px;">Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-emp-table"></tbody>
                     </table>
                 </div>
-            </div>
 
+                <div id="section-attendance" style="display:none;">
+                    <h2 style="color:#1e3a8a; margin-bottom:20px;">Today's Attendance</h2>
+                    <table border="1" style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <thead>
+                            <tr style="background: #2563eb; color: white;">
+                                <th style="padding:12px;">ID</th>
+                                <th style="padding:12px;">Email</th>
+                                <th style="padding:12px;">Check In</th>
+                                <th style="padding:12px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-att-table"></tbody>
+                    </table>
+                </div>
+
+                <div id="section-leaves" style="display:none;">
+                    <h2 style="color:#1e3a8a; margin-bottom:20px;">Pending Leave Requests</h2>
+                    <div id="admin-leave-list"></div>
+                </div>
+
+                <div id="section-payroll" style="display:none;">
+                    <h2 style="color:#1e3a8a; margin-bottom:20px;">Payroll Control</h2>
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 50%;">
+                        <p><strong>Update Salary Structure:</strong></p>
+                        <br>
+                        <input type="text" id="salary-emp-id" placeholder="Employee ID (e.g. EMP001)" style="padding: 10px; width: 100%; margin-bottom: 10px; border:1px solid #ccc;">
+                        <input type="number" id="salary-amount" placeholder="New Salary Amount" style="padding: 10px; width: 100%; margin-bottom: 10px; border:1px solid #ccc;">
+                        <button onclick="updateSalary()" style="width:100%; padding: 10px; background: green; color: white; border: none; cursor: pointer;">Update Salary</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
-<script src="managment.js"></script>
+    <script src="managment.js"></script>
 </body>
 </html>

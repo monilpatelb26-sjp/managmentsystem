@@ -140,21 +140,29 @@ async function saveProfile() {
 
 // --- ATTENDANCE & LEAVE LOGIC ---
 
-// 1. Sidebar Links Setup
-// Is function ko Sidebar ke buttons par onclick lagane ke liye use karein
+// Sidebar Link Click karne par ye chalta hai
 function showSection(sectionId) {
-    // Sab chhupao
+    // 1. Sab chhupao
     document.getElementById('employee-view').classList.add('hidden');
     document.getElementById('admin-view').classList.add('hidden');
     document.getElementById('profile-section').classList.add('hidden');
     document.getElementById('attendance-section').classList.add('hidden');
     document.getElementById('leave-section').classList.add('hidden');
+    document.getElementById('payroll-section').classList.add('hidden'); // Ye line honi chahiye
 
-    // Jo chahiye wo dikhao
+    // 2. Jo click kiya wo dikhao
     document.getElementById(sectionId).classList.remove('hidden');
 
-    // Agar leave section khula hai to history load karo
-    if(sectionId === 'leave-section') loadLeaveHistory();
+    // 3. 👇👇 YE CHECK KAREIN: Specific function call 👇👇
+    if(sectionId === 'payroll-section') {
+        loadPayroll(); // <--- Ye Salary update karega
+    }
+    if(sectionId === 'leave-section') {
+        loadLeaveHistory();
+    }
+    if(sectionId === 'profile-section') {
+        loadProfileData();
+    }
 }
 
 // 2. Attendance Function
@@ -264,51 +272,27 @@ async function loadLeaveHistory() {
     } catch (error) { console.error(error); }
 }
 
-// --- PAYROLL & ADMIN MANAGEMENT ---
-
-// 1. Sidebar Link Update
-// Sidebar me 'showSection' use karein
-// <div class="nav-item" onclick="showSection('payroll-section')">...Payroll</div>
-
-// 2. Load Employee Payroll
 async function loadPayroll() {
     const empId = localStorage.getItem("userEmpId");
     
-    // Pehle Current Salary Dikhao (Profile API se)
     try {
         const profRes = await fetch('http://127.0.0.1:5000/get_profile', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({emp_id: empId})
         });
+        
         const profData = await profRes.json();
+
+        // ... Baki code waisa hi rahega ...
         if(profData.salary) {
             document.getElementById('current-pkg').innerText = "₹ " + profData.salary;
+        } else {
+            document.getElementById('current-pkg').innerText = "₹ 0";
         }
-    } catch(e) {}
 
-    // Fir History Table Bharo
-    try {
-        const response = await fetch('http://127.0.0.1:5000/my_payroll', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ emp_id: empId })
-        });
-        const records = await response.json();
-        const tbody = document.getElementById('payroll-table-body');
-        tbody.innerHTML = "";
-
-        records.forEach(rec => {
-            tbody.innerHTML += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 10px;">${rec.month}</td>
-                    <td style="padding: 10px;">${rec.payment_date}</td>
-                    <td style="padding: 10px;">₹ ${rec.amount}</td>
-                    <td style="padding: 10px; color: green; font-weight: bold;">${rec.status}</td>
-                </tr>
-            `;
-        });
-    } catch (error) { console.error(error); }
+    } catch(e) { console.error(e); }
+    // ...
 }
 
 // 3. ADMIN: Load All Employees

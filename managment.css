@@ -113,3 +113,21 @@ button:hover {
 #dashboardScreen h1 {
     color: #1e3a8a;
 }
+
+/* Utility Class to hide elements */
+.hidden {
+    display: none;
+}
+
+/* Optional: Thoda spacing admin table ke liye */
+#adminFeatures table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+#adminFeatures th, #adminFeatures td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
